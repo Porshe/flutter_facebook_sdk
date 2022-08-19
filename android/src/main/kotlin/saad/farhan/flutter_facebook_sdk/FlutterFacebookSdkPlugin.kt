@@ -81,6 +81,10 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
 
+            "initializeSDK" -> {
+                initFbSdk();
+                result.success(null)
+            }
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
@@ -223,14 +227,15 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
 
             AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
                 override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+                    if (eventSink == null) return;
 
-                    if (appLinkData == null) {
-                        return;
-                    }
-
-                    var deepLinkUrl = appLinkData.targetUri.toString();
-                    if (eventSink != null) {
-                        eventSink!!.success(deepLinkUrl)
+                    activityPluginBinding?.activity?.runOnUiThread{
+                        if (appLinkData == null) {
+                            eventSink?.success(null)
+                        }else{
+                            var deepLinkUrl = appLinkData.targetUri.toString();
+                            eventSink?.success(deepLinkUrl)
+                        }
                     }
                 }
 
@@ -282,7 +287,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activityPluginBinding = binding
         binding.addOnNewIntentListener(this)
-        initFbSdk()
+        //initFbSdk()
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
