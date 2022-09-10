@@ -53,6 +53,8 @@ public class SwiftFlutterFacebookSdkPlugin: NSObject, FlutterPlugin, FlutterStre
             if let url = url {
                 self.deepLinkUrl = url.absoluteString
                 self.sendMessageToStream(link: self.deepLinkUrl)
+            } else {
+                self.sendMessageToStream(link: "")
             }
         }
         return true
