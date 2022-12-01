@@ -41,6 +41,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.facebook.android:facebook-android-sdk:15.0.2'
-    implementation 'com.facebook.android:facebook-applinks:15.0.2'
+    implementation 'com.facebook.android:facebook-android-sdk:15.1.0'
+    implementation 'com.facebook.android:facebook-applinks:15.1.0'
 }
